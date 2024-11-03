@@ -1,0 +1,12 @@
+[programs.localnet]
+wns = "YourProgramID"  # Replace with actual program ID
+
+[registry]
+url = "https://anchor.project-serum.com"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+deploy = "anchor deploy"

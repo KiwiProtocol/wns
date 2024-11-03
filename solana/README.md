@@ -1,105 +1,93 @@
-**Wormhole Name Service (WNS) Solana Programs: File Directory Structure & Technical Architecture**
+# Wormhole Name Service (WNS) - Solana Implementation
 
-### **Directory Structure:**
-```plain
-wns/solana/
-├── **core**
-│   ├── chain_registry.rs
-│   ├── cross_chain_sync.rs
-│   ├── root_registry.rs
-│   └── lib.rs
-├── **economic**
-│   ├── fee_distribution.rs
-│   ├── pricing_oracle.rs
-│   ├── treasury.rs
-│   └── lib.rs
-├── **governance**
-│   ├── governance.rs
-│   └── lib.rs
-├── **interoperability**
-│   ├── abstraction.rs
-│   ├── wormhole_integration.rs
-│   ├── ens.rs
-│   └── lib.rs
-├── **resolvers**
-│   ├── multichain_resolvers.rs
-│   ├── reverse_resolver.rs
-│   ├── wildcard_resolver.rs
-│   └── lib.rs
-├── **security**
-│   ├── access_control.rs
-│   ├── security_module.rs
-│   └── lib.rs
-├── **storage**
-│   ├── caching_layer.rs
-│   ├── offchain_storage.rs
-│   ├── onchain_storage.rs
-│   └── lib.rs
-├── **tests**
-│   ├── core_tests.rs
-│   ├── economic_tests.rs
-│   ├── governance_tests.rs
-│   ├── interoperability_tests.rs
-│   ├── resolvers_tests.rs
-│   ├── security_tests.rs
-│   ├── storage_tests.rs
-│   └── lib.rs
-├── **Cargo.toml**
-├── **lib.rs**
-└── **src**
-    └── **main.rs**
+## Overview
+
+The Wormhole Name Service (WNS) is a cross-chain naming service allowing users to manage decentralized identities across multiple blockchain ecosystems. This implementation on Solana includes:
+- **Cross-chain messaging** using Wormhole to synchronize names across chains.
+- **SNS integration** allowing `.sol` domain holders to receive a corresponding `.wns` domain.
+- **Automatic renewal** and domain registration fees set to `0.2 SOL` per year.
+
+## Features
+- **Domain Registration**: Register `.wns` domains.
+- **Automatic Registration for SNS `.sol` Holders**: Owners of `.sol` domains from SNS receive free `.wns` domains.
+- **Cross-Chain Messaging**: Send domain data across chains using Wormhole.
+- **Fees and Renewal**: Domains can be renewed at `0.2 SOL` per year.
+
+## Project Structure
+
+```bash
+wns-solana/
+├── programs/
+│   └── wns/
+│       ├── Cargo.toml                # Program dependencies
+│       └── src/
+│           ├── lib.rs                # Program entry point
+│           ├── instruction.rs        # Instruction logic
+│           ├── state.rs              # State definitions
+│           ├── error.rs              # Error handling
+│           ├── sns_integration.rs    # SNS integration logic
+│           └── cross_chain.rs        # Cross-chain messaging with Wormhole
+├── migrations/
+│   └── deploy.ts                     # Deployment script
+├── tests/
+│   └── wns.ts                        # Integration tests
+├── Anchor.toml                       # Anchor configuration file
+├── Cargo.toml                        # Rust dependencies
+└── README.md                         # Project documentation
 ```
 
-### **Technical Architecture:**
+## Installation and Setup
 
-1. **Core Layer**
-	* **Chain Registry**: Manages chain registrations (e.g., Solana).
-	* **Cross-Chain Sync**: Handles cross-chain message synchronization.
-	* **Root Registry**: Central registry for WNS.
-	* **State Management**: Utilizes Solana's account system for state storage.
+### Prerequisites
+- **Rust and Anchor CLI**: Install Rust and Anchor CLI.
+    ```bash
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    cargo install --git https://github.com/project-serum/anchor anchor-cli --locked
+    ```
+- **Solana CLI**: Install Solana CLI.
+    ```bash
+    sh -c "$(curl -sSfL https://release.solana.com/v1.8.0/install)"
+    ```
 
-2. **Economic Layer**
-	* **Fee Distribution**: Manages fee distribution among stakeholders.
-	* **Pricing Oracle**: Provides pricing data for cross-chain transactions.
-	* **Treasury**: Manages WNS treasury.
-	* **State Management**: Leverages Solana's account system for state storage.
+### Build and Deploy
+1. **Build the Project**:
+    ```bash
+    anchor build
+    ```
+2. **Deploy to Local Validator**:
+    ```bash
+    solana-test-validator &
+    anchor deploy
+    ```
 
-3. **Governance Layer**
-	* **Governance**: Handles proposals and voting for WNS.
-	* **State Management**: Utilizes Solana's account system for state storage.
+3. **Set up Environment for Testnet Deployment**:
+    ```bash
+    solana config set --url https://api.devnet.solana.com
+    anchor deploy
+    ```
 
-4. **Interoperability Layer**
-	* **Abstraction**: Abstract layer for cross-chain interactions.
-	* **Wormhole Integration**: Integrates with Wormhole for cross-chain messaging.
-	* **SNS Integration**: Solana's naming service integration.
-	* **API Interfaces**: Defines APIs for external interactions.
+### Running Tests
+Run the tests using:
+```bash
+anchor test
+```
 
-5. **Resolvers Layer**
-	* **Multichain Resolvers**: Resolves names across multiple chains.
-	* **Reverse Resolver**: Handles reverse lookup functionality.
-	* **Wildcard Resolver**: Manages wildcard resolutions.
-	* **API Interfaces**: Defines APIs for external interactions.
+## Usage Examples
+1. **Register a New WNS Domain**:
+   ```typescript
+   await program.methods.registerName("alice.wns", ownerPubkey).rpc();
+   ```
 
-6. **Security Layer**
-	* **Access Control**: Manages access permissions.
-	* **Security Module**: Additional security measures (e.g., rate limiting).
-	* **Audit Logging**: Implements logging for security audits.
+2. **Automatically Register a WNS Domain from an Existing SNS Domain**:
+   ```typescript
+   await program.methods.registerWnsFromSns("alice.sol").rpc();
+   ```
 
-7. **Storage Layer**
-	* **Caching Layer**: Implements caching for frequently accessed data.
-	* **Offchain Storage**: Stores data off-chain (e.g., IPFS).
-	* **Onchain Storage**: Stores data on-chain (e.g., Solana accounts).
-	* **Data Encryption**: Encrypts sensitive data.
+---
 
-### **Key Technologies:**
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-* **Programming Language:** Rust
-* **Solana Framework:** Spl_Governance
-* **Database/Storage:** Solana Accounts, IPFS (off-chain)
-
-### **Deployment Strategy:**
-
-1. **Local Development:** Utilize `cargo build-bpf` and `solana-cli` for local testing.
-2. **Testnet Deployment:** Deploy to Solana Testnet for integration testing.
-3. **Mainnet Deployment:** Deploy to Solana Mainnet after thorough testing.
-4. **Monitoring and Maintenance:** Utilize Solana's monitoring tools and implement a maintenance schedule.
+## Support
+For questions or issues, please reach out via our [Telegram](https://t.me/Tom_Tom29).
+```

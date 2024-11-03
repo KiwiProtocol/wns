@@ -1,0 +1,25 @@
+{
+    "name": "wns-solana",
+    "version": "1.0.0",
+    "description": "Solana implementation of Wormhole Name Service (WNS) with SNS integration",
+    "main": "migrations/deploy.ts",
+    "scripts": {
+      "build": "anchor build",
+      "deploy": "ts-node migrations/deploy.ts",
+      "test": "anchor test"
+    },
+    "author": "UncleTom",
+    "license": "MIT",
+    "dependencies": {
+      "@project-serum/anchor": "^0.22.0",
+      "@solana/web3.js": "^1.33.0",
+      "chai": "^4.3.4",
+      "ts-node": "^10.2.1",
+      "typescript": "^4.3.5"
+    },
+    "devDependencies": {
+      "@types/chai": "^4.2.22",
+      "@types/node": "^16.6.1"
+    }
+  }
+  
