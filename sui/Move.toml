@@ -1,0 +1,9 @@
+[package]
+name = "wns"
+version = "1.0.0"
+authors = ["Uncle Tom"]
+
+[dependencies]
+Wormhole = { git = "https://github.com/wormhole-foundation/wormhole-sui.git", rev = "latest" }
+Sui = { git = "https://github.com/MystenLabs/sui.git", rev = "latest" }
+SuiNS = { git = "https://github.com/MystenLabs/suins.git", rev = "latest" }
